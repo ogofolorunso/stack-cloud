@@ -4,10 +4,8 @@
 sudo su -
 sudo yum update -y
 sudo yum install -y nfs-utils
-FILE_SYSTEM_ID=fs-a60a1c13
-AVAILABILITY_ZONE=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone )
-REGION=${AVAILABILITY_ZONE:0:-1}
-MOUNT_POINT=/var/www/html
+#FILE_SYSTEM_ID=fs-a60a1c13
+#MOUNT_POINT=/var/www/html
 mkdir -p ${MOUNT_POINT}
 chown ec2-user:ec2-user ${MOUNT_POINT}
 echo ${FILE_SYSTEM_ID}.efs.${REGION}.amazonaws.com:/ ${MOUNT_POINT} nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,_netdev 0 0 >> /etc/fstab
