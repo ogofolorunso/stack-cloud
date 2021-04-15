@@ -11,7 +11,7 @@ resource "aws_instance" "web" {
         REGION = var.AWS_REGION,
         FILE_SYSTEM_ID = aws_efs_file_system.ogo.id
         })
-    security_groups = [ "tf-security" ]
+    security_groups = [ "tf-security1" ]
     depends_on = [aws_efs_mount_target.alpha]
     key_name = var.PATH_TO_PRIVATE_KEY
 
@@ -39,7 +39,7 @@ resource "aws_efs_mount_target" "alpha" {
 
 ##CREATE SECURITY GROUP AND ADD DIFFERENT PORTS
 resource "aws_security_group" "web-sg" {
-    name = "tf-security"
+    name = "tf-security1"
     ingress {
         from_port   = 80
         to_port     = 80
@@ -78,8 +78,9 @@ resource "aws_security_group" "web-sg" {
     }
 }
 
-resource "aws_launch_configuration" "test_config" {
-    name_prefix   = "terraform-launch-config"
+#CREATING AN AUTOSCALING GROUP
+resource "aws_launch_configuration" "test_configg" {
+    name_prefix   = "terraform-launch-config1"
     image_id      = var.AMIS["us-east-1"]
     instance_type = "t2.micro"
     security_groups = [aws_security_group.web-sg.id]
@@ -88,8 +89,8 @@ resource "aws_launch_configuration" "test_config" {
     
 
 resource "aws_autoscaling_group" "tf" {
-    name                 = "terraform-ogo-example"
-    launch_configuration = aws_launch_configuration.test_config.name
+    name                 = "terraform-ogo-examplee"
+    launch_configuration = aws_launch_configuration.test_configg.name
     min_size             = 0
     max_size             = 0
     health_check_grace_period = 300
