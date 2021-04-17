@@ -1,7 +1,8 @@
 variable "AWS_ACCESS_KEY" {}
 
- variable "AWS_SECRET_KEY" {}
+variable "AWS_SECRET_KEY" {}
 
+variable "AWS_RDS_PASSWORD" {}
 
 variable "AWS_REGION" {
   default = "us-east-1"
@@ -35,6 +36,18 @@ variable "my_aws_subnet" {
     "us-east-1e" = "subnet-5d93276c"
   }
 }  
+
+variable "AWS_RDS_ENDPOINT" {
+  default = "database-1.c1b7pnxpluqx.us-east-1.rds.amazonaws.com"
+}
+
+variable "DATABASE_NAME" {
+  default = "stack-wordpress-db3"
+}
+
+variable "DB_USERNAME" {
+  default = "wordpress-user"
+}
 
  #variable "RDS_PASSWORD" {
 # }
