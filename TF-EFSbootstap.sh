@@ -58,25 +58,14 @@ sudo systemctl status httpd
 sudo systemctl status mariadb
 
 #####INSTALL WORDPRESS####
-wget https://wordpress.org/latest.tar.gz
-tar -xzf latest.tar.gz
 cp wordpress/wp-config-sample.php wordpress/wp-config.php
-mkdir /var/www/html/
 cp -r wordpress/* /var/www/html/
 
 ###CREATE WORDPRESS DATABASE AND USER#
-export DEBIAN_FRONTEND="noninteractive"
-sudo mysql -u root <<EOF
-CREATE USER 'wordpress-user'@'localhost' IDENTIFIED BY 'stackinc';
-CREATE DATABASE \`stack-wordpress-db3\`;
-USE \`stack-wordpress-db3\`;
-GRANT ALL PRIVILEGES ON \`stack-wordpress-db3\`.* TO 'wordpress-user'@'localhost';
-FLUSH PRIVILEGES;
-show tables;
-EOF
-sudo sed -i 's/database_name_here/stack-wordpress-db3/' /var/www/html/wp-config.php
-sudo sed -i 's/username_here/wordpress-user/' /var/www/html/wp-config.php
-sudo sed -i 's/password_here/stackinc/' /var/www/html/wp-config.php
+sudo sed -i 's/database_name_here/$DB_NAME/' /var/www/html/wp-config.php
+sudo sed -i 's/username_here/$DB_USER/' /var/www/html/wp-config.php
+sudo sed -i 's/password_here/$RDS_PASSWORD/' /var/www/html/wp-config.php
+sudo sed -i 's/local_host/$RDS_ENDPOINT/' /var/www/html/wp-config.php
 
 ## Allow wordpress to use Permalinks###
 sudo sed -i '151s/None/All/' /etc/httpd/conf/httpd.conf

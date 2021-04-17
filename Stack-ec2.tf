@@ -9,7 +9,12 @@ resource "aws_instance" "web" {
     user_data = templatefile("TF-EFSbootstap.sh", {
         MOUNT_POINT="/var/www/html",
         REGION = var.AWS_REGION,
-        FILE_SYSTEM_ID = aws_efs_file_system.ogo.id
+        FILE_SYSTEM_ID = aws_efs_file_system.ogo.id,
+        DB_NAME = var.DATABASE_NAME,
+        DB_USER = var.DB_USERNAME,
+        RDS_ENDPOINT = var.AWS_RDS_ENDPOINT,
+        RDS_PASSWORD = var.AWS_RDS_PASSWORD
+
         })
     security_groups = [ "tf-security1" ]
     depends_on = [aws_efs_mount_target.alpha]
@@ -39,7 +44,7 @@ resource "aws_efs_mount_target" "alpha" {
 
 ##CREATE SECURITY GROUP AND ADD DIFFERENT PORTS
 resource "aws_security_group" "web-sg" {
-    name = "tf-security1"
+    name = "tf-security11"
     ingress {
         from_port   = 80
         to_port     = 80
@@ -108,6 +113,19 @@ resource "aws_autoscaling_group" "tf" {
         propagate_at_launch = true
     }
 }
+
+/*
+terraform{
+        backend “s3”{
+                bucket= “Stackbuckstate[yourname]”
+                key = “terraform.tfstate”
+                region=”us-east-1”
+                }
+}
+*/
+
+
+
 
 /*
 ##CREATING AN SSH KEY
