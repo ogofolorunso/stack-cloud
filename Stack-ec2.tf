@@ -44,7 +44,7 @@ resource "aws_efs_mount_target" "alpha" {
 
 ##CREATE SECURITY GROUP AND ADD DIFFERENT PORTS
 resource "aws_security_group" "web-sg" {
-    name = "tf-security11"
+    name = "tf-security1"
     ingress {
         from_port   = 80
         to_port     = 80
