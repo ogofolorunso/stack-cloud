@@ -22,8 +22,8 @@ sudo chown -R ec2-user:apache /var/www
 sudo chmod 2775 /var/www && find /var/www -type d -exec sudo chmod 2775 {} \;
 find /var/www -type f -exec sudo chmod 0664 {} \;
 sudo systemctl start mariadb
-aws s3 cp s3://mystacks3website/index.html /var/www/html
-aws s3 cp s3://mystacks3website/Stack_IT_Logo.png /var/www/html
+#aws s3 cp s3://mystacks3website/index.html /var/www/html
+#aws s3 cp s3://mystacks3website/Stack_IT_Logo.png /var/www/html
 
 
 ###INSTALL AND START LINUC APACHE MYSQL & PHP DRIVERS####
@@ -51,6 +51,8 @@ cd /var/www/html
 wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz
 mkdir phpMyAdmin && tar -xvzf phpMyAdmin-latest-all-languages.tar.gz -C phpMyAdmin --strip-components 1
 rm phpMyAdmin-latest-all-languages.tar.gz
+aws s3 cp s3://stackwpogo /var/www/html --recursive
+
 sudo systemctl start mariadb
 sudo chkconfig httpd on
 sudo chkconfig mariadb on
@@ -58,14 +60,14 @@ sudo systemctl status httpd
 sudo systemctl status mariadb
 
 #####INSTALL WORDPRESS####
-cp wordpress/wp-config-sample.php wordpress/wp-config.php
-cp -r wordpress/* /var/www/html/
+#cp wordpress/wp-config-sample.php wordpress/wp-config.php
+#cp -r wordpress/* /var/www/html/
 
 ###CREATE WORDPRESS DATABASE AND USER#
-sudo sed -i 's/database_name_here/$DB_NAME/' /var/www/html/wp-config.php
-sudo sed -i 's/username_here/$DB_USER/' /var/www/html/wp-config.php
-sudo sed -i 's/password_here/$RDS_PASSWORD/' /var/www/html/wp-config.php
-sudo sed -i 's/local_host/$RDS_ENDPOINT/' /var/www/html/wp-config.php
+sudo sed -i 's/database_name_here/${DB_NAME}/' /var/www/html/wp-config.php
+sudo sed -i 's/username_here/${DB_USER}/' /var/www/html/wp-config.php
+sudo sed -i 's/password_here/${RDS_PASSWORD}/' /var/www/html/wp-config.php
+sudo sed -i 's/local_host/${RDS_ENDPOINT}/' /var/www/html/wp-config.php
 
 ## Allow wordpress to use Permalinks###
 sudo sed -i '151s/None/All/' /etc/httpd/conf/httpd.conf
