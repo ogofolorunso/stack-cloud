@@ -1,8 +1,10 @@
+
 #!/bin/bash
 
-#sudo su -
+sudo su -
 
 #Partioning the 3 different EBS volumes
+#fdisk /dev/xvdc < fdisk_cmds
 #(echo n; echo p; echo 1; echo 2048; echo 16777215; echo w) | fdisk /dev/xvdb
 
 sudo fdisk /dev/xvdb <<EOT
@@ -29,7 +31,7 @@ p
 16777215
 w
 EOT
-sudo fdisk /dev/xvdd <<EOT
+sudo fdisk /dev/xvde <<EOT
 n
 p
 1
@@ -74,4 +76,4 @@ sudo mount /dev/stack_vg/Lv_u04 /u04
 df -h
 
 #Resizing the disks(Extending the disk by 3G)
-resize2fs /dev/mapper/stack_vg-Lv_u01
+#resize2fs /dev/mapper/stack_vg-Lv_u01

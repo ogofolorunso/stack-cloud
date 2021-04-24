@@ -46,7 +46,7 @@ variable "DATABASE_NAME" {
 }
 
 variable "DB_USERNAME" {
-  default = "wordpress-user"
+  default = "wordpressuser"
 }
 
  #variable "RDS_PASSWORD" {
