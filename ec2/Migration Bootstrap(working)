@@ -64,8 +64,8 @@ sudo systemctl status mariadb
 #cp -r wordpress/* /var/www/html/
 
 ###CREATE WORDPRESS DATABASE AND USER#
-sudo sed -i 's/database_name_here/${DB_NAME}/' /var/www/html/wp-config.php
-sudo sed -i 's/username_here/${DB_USER}/' /var/www/html/wp-config.php
+sudo sed -i 's/database_name_here/${DATABASE_NAME}/' /var/www/html/wp-config.php
+sudo sed -i 's/username_here/${DB_USERNAME}/' /var/www/html/wp-config.php
 sudo sed -i 's/password_here/${RDS_PASSWORD}/' /var/www/html/wp-config.php
 sudo sed -i 's/local_host/${RDS_ENDPOINT}/' /var/www/html/wp-config.php
 

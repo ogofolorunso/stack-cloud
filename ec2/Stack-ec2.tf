@@ -6,14 +6,14 @@
 resource "aws_instance" "web" {
     ami           = var.AMIS["us-east-1"]
     instance_type = "t2.micro"
-    user_data = templatefile("TF-EFSbootstap.sh", {
+    user_data = templatefile("ec2/TF-EFSbootstap.sh", {
         MOUNT_POINT="/var/www/html",
         REGION = var.AWS_REGION,
         FILE_SYSTEM_ID = aws_efs_file_system.ogo.id,
-        DB_NAME = var.DATABASE_NAME,
-        DB_USER = var.DB_USERNAME,
+        DATABASE_NAME = var.DATABASE_NAME,
+        DB_USERNAME = var.DB_USERNAME,
         RDS_ENDPOINT = var.AWS_RDS_ENDPOINT,
-        RDS_PASSWORD = var.AWS_RDS_PASSWORD
+        RDS_PASSWORD = var.RDS_PASSWORD
 
         })
     security_groups = [ "tf-security141" ]

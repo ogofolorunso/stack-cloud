@@ -49,8 +49,6 @@ variable "DB_USERNAME" {
   default = "wordpressuser"
 }
 
-
-
 variable "DB_PASSWORD" {
 }
 
