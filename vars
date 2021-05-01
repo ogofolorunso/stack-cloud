@@ -2,7 +2,7 @@ variable "AWS_ACCESS_KEY" {}
 
 variable "AWS_SECRET_KEY" {}
 
-variable "RDS_PASSWORD" {}
+variable "AWS_RDS_PASSWORD" {}
 
 variable "AWS_REGION" {
   default = "us-east-1"
@@ -42,16 +42,15 @@ variable "AWS_RDS_ENDPOINT" {
 }
 
 variable "DATABASE_NAME" {
-  default = "wordpressdb"
+  default = "stack-wordpress-db3"
 }
 
 variable "DB_USERNAME" {
   default = "wordpressuser"
 }
 
+ #variable "RDS_PASSWORD" {
+# }
 
-
-variable "DB_PASSWORD" {
-}
-
-
+#variable "INSTANCE_USERNAME" {
+#}

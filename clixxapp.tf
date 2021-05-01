@@ -1,3 +1,22 @@
+resource "aws_db_instance" "dev" {
+    instance_class      = "db.t2.micro"
+    name                = ""
+    snapshot_identifier = "clixxdbsnap"
+    username             = "wordpressuser"
+    password             = "W3lcome123"
+    skip_final_snapshot       = true
+    availability_zone        = "us-east-1a"
+    vpc_security_group_ids = [aws_security_group.web-sg.id]
+    
+
+    lifecycle {
+    ignore_changes = [snapshot_identifier]
+    }
+
+    depends_on = [aws_instance.web]
+}
+
+
 ## CREATE EC2 INSTANCE
 ## ADD SECURITY GROUP
 ## ADD TAGS
@@ -6,17 +25,18 @@
 resource "aws_instance" "web" {
     ami           = var.AMIS["us-east-1"]
     instance_type = "t2.micro"
-    user_data = templatefile("TF-EFSbootstap.sh", {
+    availability_zone = "us-east-1a"
+    user_data = templatefile("clixxapp/clix-bootstrap.sh", {
         MOUNT_POINT="/var/www/html",
         REGION = var.AWS_REGION,
         FILE_SYSTEM_ID = aws_efs_file_system.ogo.id,
-        DB_NAME = var.DATABASE_NAME,
-        DB_USER = var.DB_USERNAME,
+        DATABASE_NAME = var.DATABASE_NAME,
+        DB_USERNAME = var.DB_USERNAME,
         RDS_ENDPOINT = var.AWS_RDS_ENDPOINT,
-        RDS_PASSWORD = var.AWS_RDS_PASSWORD
+        RDS_PASSWORD = var.RDS_PASSWORD
 
         })
-    security_groups = [ "tf-security141" ]
+    security_groups = [ "tf-security14" ]
     depends_on = [aws_efs_mount_target.alpha]
     key_name = var.PATH_TO_PRIVATE_KEY
     iam_instance_profile = "S3-Admin-Role"
@@ -71,8 +91,8 @@ resource "aws_security_group" "web-sg" {
         cidr_blocks = ["0.0.0.0/0"]
     }
     ingress {
-        from_port   = 443
-        to_port     = 443
+        from_port   = 3306
+        to_port     = 3306
         protocol    = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
@@ -84,6 +104,7 @@ resource "aws_security_group" "web-sg" {
     }
 }
 
+/*
 #CREATING AN AUTOSCALING GROUP
 resource "aws_launch_configuration" "test_configg" {
     name_prefix   = "terraform-launch-config1"
@@ -114,6 +135,7 @@ resource "aws_autoscaling_group" "tf" {
         propagate_at_launch = true
     }
 }
+*/
 
 /*
 terraform{
