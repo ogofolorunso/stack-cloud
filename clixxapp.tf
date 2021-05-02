@@ -26,7 +26,7 @@ resource "aws_instance" "web" {
     ami           = var.AMIS["us-east-1"]
     instance_type = "t2.micro"
     availability_zone = "us-east-1a"
-    user_data = templatefile("clixxapp/clix-bootstrap.sh", {
+    user_data = templatefile("clix-bootstrap.sh", {
         MOUNT_POINT="/var/www/html",
         REGION = var.AWS_REGION,
         FILE_SYSTEM_ID = aws_efs_file_system.ogo.id,
