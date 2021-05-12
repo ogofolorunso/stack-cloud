@@ -312,8 +312,8 @@ resource "aws_lb" "test" {
     load_balancer_type = "application"
     security_groups    = [aws_security_group.LB-sg.id]
     subnets            = [
-        aws_subnet.Subnet_A["Public_Subnet_Subnet_B_TF"].id,
-        aws_subnet.Subnet_B["Public_Subnet_Subnet_A_TF"].id
+        aws_subnet.Subnet_A["Public_Subnet_Subnet_A_TF"].id,
+        aws_subnet.Subnet_B["Public_Subnet_Subnet_B_TF"].id
             ]
     enable_deletion_protection = false
 
