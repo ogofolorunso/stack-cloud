@@ -4,11 +4,6 @@
 #sudo su -
 sudo yum update -y
 sudo yum install -y nfs-utils
-mkdir -p ${MOUNT_POINT}
-chown ec2-user:ec2-user ${MOUNT_POINT}
-echo ${FILE_SYSTEM_ID}.efs.${REGION}.amazonaws.com:/ ${MOUNT_POINT} nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,_netdev 0 0 >> /etc/fstab
-sudo mount -a -t nfs4
-chmod -R 755 /var/www/html
 sudo su - ec2-user
 sudo systemctl start httpd
 sudo systemctl enable httpd
@@ -53,15 +48,15 @@ git clone https://github.com/stackitgit/CliXX_Retail_Repository.git
 cp -r CliXX_Retail_Repository/* /var/www/html
 
 
-#####INSTALL WORDPRESS####
-cp wordpress/wp-config-sample.php wordpress/wp-config.php
+#####CONFIGURE CLIXX####
+cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
 #cp -r wordpress/* /var/www/html/
 
 ###CREATE clixx DATABASE AND USER#
 sudo sed -i 's/database_name_here/${DATABASE_NAME}/' /var/www/html/wp-config.php
 sudo sed -i 's/username_here/${DB_USERNAME}/' /var/www/html/wp-config.php
 sudo sed -i 's/password_here/${RDS_PASSWORD}/' /var/www/html/wp-config.php
-sudo sed -i 's/localhost/${RDS_ENDPOINT}/' /var/www/html/wp-config.php
+sudo sed -i 's/localhost/${DB_HOST}/' /var/www/html/wp-config.php
 
 ## Allow wordpress to use Permalinks###
 sudo sed -i '151s/None/All/' /etc/httpd/conf/httpd.conf
@@ -82,4 +77,10 @@ sudo systemctl start httpd
 curl http://169.254.169.254/latest/meta-data/public-ipv4
 
 
+###UPDATE WORDPRESS URL TO LATEST INSTANCE IP ADDRESS###
+mysql -h ${DB_HOST} -D ${DATABASE_NAME} -u\${DB_USERNAME} -p\${RDS_PASSWORD} <<EOT
+use ${DATABASE_NAME};
+UPDATE wp_options SET option_value = "http://${LB_DNS}" WHERE option_value LIKE 'http%';
+commit;
+EOT
 
