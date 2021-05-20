@@ -221,14 +221,24 @@ tags = {
 }
 }
 
+data "aws_secretsmanager_secret_version" "creds" {
+    # Fill in the name you gave to your secret
+    secret_id = "creds"
+}
+locals {
+    db_creds = jsondecode(
+        data.aws_secretsmanager_secret_version.creds.secret_string
+    )
+}
+
 #Create the Database from snapshot
 resource "aws_db_instance" "dev" {
     instance_class      = "db.t2.micro"
     db_subnet_group_name = aws_db_subnet_group.clixx.id
     identifier                = "clixxvpcdbterraform"
     snapshot_identifier = "clixxdbsnap"
-    username             = "wordpressuser"
-    password             = "W3lcome123"
+    username=local.db_creds.username
+    password=local.db_creds.password
     skip_final_snapshot       = true
     #availability_zone        = "us-east-1a"
     vpc_security_group_ids = [aws_security_group.RDS-sg.id]
