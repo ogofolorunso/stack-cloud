@@ -220,7 +220,7 @@ tags = {
     Name = each.key
 }
 }
-
+/*
 data "aws_secretsmanager_secret_version" "creds" {
     # Fill in the name you gave to your secret
     secret_id = "creds"
@@ -230,6 +230,18 @@ locals {
         data.aws_secretsmanager_secret_version.creds.secret_string
     )
 }
+*/
+data "aws_kms_secrets" "creds" {
+    secret {
+        name    = "db"
+        payload = file("creds.yml.encrypted")
+    }
+}
+
+locals {
+    db_creds = yamldecode(data.aws_kms_secrets.creds.plaintext["db"])
+}
+
 
 #Create the Database from snapshot
 resource "aws_db_instance" "dev" {
